@@ -4,6 +4,9 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { iamClient } from './services/iam/iam.shared'
+export type { Iam, IamData, IamQuery, IamPatch } from './services/iam/iam.shared'
+
 export interface Configuration {
   connection: TransportConnection<ServiceTypes>
 }
@@ -30,5 +33,6 @@ export const createClient = <Configuration = any,>(
   client.configure(authenticationClient(authenticationOptions))
   client.set('connection', connection)
 
+  client.configure(iamClient)
   return client
 }
