@@ -35,7 +35,7 @@
   ],
   "main": "lib/client",
   "scripts": {
-    "dev": "nodemon -x ts-node src/index.ts",
+    "dev": "cross-env NODE_ENV=dev ts-node src/index.ts",
     "compile": "shx rm -rf lib/ && tsc",
     "start": "npm run compile && node lib/",
     "prettier": "npx prettier \"**/*.ts\" --write",
