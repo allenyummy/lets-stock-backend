@@ -12,9 +12,19 @@ import type { StockService } from './stock.class'
 export const stockSchema = Type.Object(
   {
     _id: ObjectIdSchema(),
+    // meta
     dateTime: Type.String({ format: 'date-time' }),
+    securityFirm: Type.Enum({ Cathay: '國泰證券', Capital: '群益證券', Ctbc: '中信證券' }),
+    // stock
+    stockOperationCategory: Type.Enum({ Buy: 'buy', Sell: 'sell', Dividend: 'dividend' }),
+    stockCode: Type.String(),
     stockNum: Type.Number(),
-    stockCode: Type.String()
+    stockPrice: Type.Number(),
+    stockDividend: Type.Number(),
+    // price
+    totalFee: Type.Number(),
+    totalTax: Type.Number(),
+    totalAmount: Type.Number()
   },
   { $id: 'Stock', additionalProperties: false }
 )
@@ -25,9 +35,24 @@ export const stockResolver = resolve<Stock, HookContext<StockService>>({})
 export const stockExternalResolver = resolve<Stock, HookContext<StockService>>({})
 
 // Schema for creating new entries
-export const stockDataSchema = Type.Pick(stockSchema, ['dateTime', 'stockNum', 'stockCode'], {
-  $id: 'StockData'
-})
+export const stockDataSchema = Type.Pick(
+  stockSchema,
+  [
+    'dateTime',
+    'securityFirm',
+    'stockOperationCategory',
+    'stockCode',
+    'stockNum',
+    'stockPrice',
+    'stockDividend',
+    'totalFee',
+    'totalTax',
+    'totalAmount'
+  ],
+  {
+    $id: 'StockData'
+  }
+)
 export type StockData = Static<typeof stockDataSchema>
 export const stockDataValidator = getValidator(stockDataSchema, dataValidator)
 export const stockDataResolver = resolve<Stock, HookContext<StockService>>({})
@@ -41,7 +66,12 @@ export const stockPatchValidator = getValidator(stockPatchSchema, dataValidator)
 export const stockPatchResolver = resolve<Stock, HookContext<StockService>>({})
 
 // Schema for allowed query properties
-export const stockQueryProperties = Type.Pick(stockSchema, ['_id', 'dateTime', 'stockCode'])
+export const stockQueryProperties = Type.Pick(stockSchema, [
+  '_id',
+  'securityFirm',
+  'stockOperationCategory',
+  'stockCode'
+])
 export const stockQuerySchema = Type.Intersect(
   [
     querySyntax(stockQueryProperties),
