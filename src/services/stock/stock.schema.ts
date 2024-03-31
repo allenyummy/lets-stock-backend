@@ -12,6 +12,8 @@ import type { StockService } from './stock.class'
 export const stockSchema = Type.Object(
   {
     _id: ObjectIdSchema(),
+    // user info
+    userId: Type.String(),
     // meta
     dateTime: Type.String({ format: 'date-time' }),
     securityFirm: Type.Enum({ Cathay: '國泰證券', Capital: '群益證券', Ctbc: '中信證券' }),
@@ -38,6 +40,7 @@ export const stockExternalResolver = resolve<Stock, HookContext<StockService>>({
 export const stockDataSchema = Type.Pick(
   stockSchema,
   [
+    'userId',
     'dateTime',
     'securityFirm',
     'stockOperationCategory',
@@ -67,16 +70,17 @@ export const stockPatchResolver = resolve<Stock, HookContext<StockService>>({})
 
 // Schema for allowed query properties
 export const stockQueryProperties = Type.Pick(stockSchema, [
-  '_id',
   'securityFirm',
   'stockOperationCategory',
   'stockCode'
 ])
+
 export const stockQuerySchema = Type.Intersect(
   [
     querySyntax(stockQueryProperties),
-    // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
+    Type.Object({
+      userId: Type.String()
+    })
   ],
   { additionalProperties: false }
 )
