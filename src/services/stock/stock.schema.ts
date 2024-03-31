@@ -78,9 +78,7 @@ export const stockQueryProperties = Type.Pick(stockSchema, [
 export const stockQuerySchema = Type.Intersect(
   [
     querySyntax(stockQueryProperties),
-    Type.Object({
-      userId: Type.String()
-    })
+    Type.Object({ userId: Type.String() }, { additionalProperties: false })
   ],
   { additionalProperties: false }
 )
