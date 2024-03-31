@@ -1,7 +1,8 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
-import type { Params } from '@feathersjs/feathers'
+import type { Params, Paginated } from '@feathersjs/feathers'
+import type { PaginationOptions } from '@feathersjs/adapter-commons'
 import { MongoDBService } from '@feathersjs/mongodb'
-import type { MongoDBAdapterParams, MongoDBAdapterOptions } from '@feathersjs/mongodb'
+import type { MongoDBAdapterParams, MongoDBAdapterOptions, AdapterId } from '@feathersjs/mongodb'
 
 import type { Application } from '../../declarations'
 import type { Stock, StockData, StockPatch, StockQuery } from './stock.schema'
@@ -16,7 +17,17 @@ export class StockService<ServiceParams extends Params = StockParams> extends Mo
   StockData,
   StockParams,
   StockPatch
-> {}
+> {
+  async find(params?: StockParams & { paginate?: PaginationOptions }): Promise<Paginated<Stock>>
+  async find(params?: StockParams & { paginate: false }): Promise<Stock[]>
+  async find(params?: StockParams): Promise<Paginated<Stock> | Stock[]> {
+    return super.find(params)
+  }
+
+  async get(id: AdapterId, params?: StockParams): Promise<Stock> {
+    return super.get(id, params)
+  }
+}
 
 export const getOptions = (app: Application): MongoDBAdapterOptions => {
   return {
