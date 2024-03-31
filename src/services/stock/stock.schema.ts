@@ -70,6 +70,7 @@ export const stockPatchResolver = resolve<Stock, HookContext<StockService>>({})
 
 // Schema for allowed query properties
 export const stockQueryProperties = Type.Pick(stockSchema, [
+  '_id',
   'securityFirm',
   'stockOperationCategory',
   'stockCode'
