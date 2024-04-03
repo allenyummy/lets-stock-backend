@@ -1,4 +1,5 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
+import { isNil } from 'lodash'
 import type { Params, Paginated } from '@feathersjs/feathers'
 import type { PaginationOptions } from '@feathersjs/adapter-commons'
 import { MongoDBService } from '@feathersjs/mongodb'
@@ -21,6 +22,22 @@ export class StockService<ServiceParams extends Params = StockParams> extends Mo
   async find(params?: StockParams & { paginate?: PaginationOptions }): Promise<Paginated<Stock>>
   async find(params?: StockParams & { paginate: false }): Promise<Stock[]>
   async find(params?: StockParams): Promise<Paginated<Stock> | Stock[]> {
+    if (!isNil(params?.query?.beginDate) && !isNil(params?.query?.endDate)) {
+      const { filters } = this.filterQuery(null, params || {})
+      const { $limit: limit, $skip: skip } = filters
+      const query = {
+        userId: params?.query?.userId,
+        dateTime: { $gte: params.query.beginDate, $lte: params.query.endDate }
+      }
+      const total = await (await this.getModel()).countDocuments(query)
+      const result = await (await this.getModel()).find(query).skip(skip).limit(limit).toArray()
+      return {
+        total,
+        limit,
+        skip,
+        data: result as any as Stock[]
+      }
+    }
     return super.find(params)
   }
 

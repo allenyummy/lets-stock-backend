@@ -79,7 +79,14 @@ export const stockQueryProperties = Type.Pick(stockSchema, [
 export const stockQuerySchema = Type.Intersect(
   [
     querySyntax(stockQueryProperties),
-    Type.Object({ userId: Type.String() }, { additionalProperties: false })
+    Type.Object(
+      {
+        userId: Type.String(),
+        beginDate: Type.Optional(Type.String({ format: 'date-time' })),
+        endDate: Type.Optional(Type.String({ format: 'date-time' }))
+      },
+      { additionalProperties: false }
+    ),
   ],
   { additionalProperties: false }
 )
