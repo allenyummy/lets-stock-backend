@@ -21,7 +21,8 @@ export class StockService<ServiceParams extends Params = StockParams> extends Mo
   async find(params?: StockParams & { paginate?: PaginationOptions }): Promise<Paginated<Stock>>
   async find(params?: StockParams & { paginate: false }): Promise<Stock[]>
   async find(params?: StockParams): Promise<Paginated<Stock> | Stock[]> {
-    return super.find(params)
+    const newParams = { ...params, query: transformQuery(params?.query || ({} as StockQuery)) }
+    return super.find(newParams)
   }
 
   async get(id: AdapterId, params?: StockParams): Promise<Stock> {
@@ -34,4 +35,12 @@ export const getOptions = (app: Application): MongoDBAdapterOptions => {
     paginate: app.get('paginate'),
     Model: app.get('mongodbClient').then((db) => db.collection('stock'))
   }
+}
+
+const transformQuery = (query: StockQuery): StockQuery => {
+  const { beginDate, endDate, ...rest } = query
+  return {
+    ...rest,
+    dateTime: { $gte: beginDate, $lte: endDate }
+  } as StockQuery
 }
