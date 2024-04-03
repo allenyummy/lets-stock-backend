@@ -83,10 +83,10 @@ export const stockQuerySchema = Type.Intersect(
       {
         userId: Type.String(),
         beginDate: Type.Optional(Type.String({ format: 'date-time' })),
-        endDate: Type.Optional(Type.String({ format: 'date-time' }))
+        endDate: Type.Optional(Type.String({ format: 'date-time' })),
       },
       { additionalProperties: false }
-    ),
+    )
   ],
   { additionalProperties: false }
 )
