@@ -1,5 +1,4 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
-import { isNil } from 'lodash'
 import type { Params, Paginated } from '@feathersjs/feathers'
 import type { PaginationOptions } from '@feathersjs/adapter-commons'
 import { MongoDBService } from '@feathersjs/mongodb'
