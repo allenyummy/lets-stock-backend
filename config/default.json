@@ -9,5 +9,32 @@
     "default": 10,
     "max": 50
   },
-  "mongodb": "mongodb://root:example@mongo:27017/lets-stock-backend?authSource=admin"
+  "mongodb": "mongodb://root:example@mongo:27017/lets-stock-backend?authSource=admin",
+  "authentication": {
+    "entity": "user",
+    "service": "users",
+    "secret": "qaZz4KZzb23VDF0dogNINSkg7S/kMUAt",
+    "authStrategies": [
+      "jwt",
+      "local"
+    ],
+    "jwtOptions": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "usernameField": "email",
+      "passwordField": "password"
+    },
+    "oauth": {
+      "google": {
+        "key": "<Client ID>",
+        "secret": "<Client secret>"
+      }
+    }
+  }
 }
