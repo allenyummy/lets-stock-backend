@@ -71,6 +71,8 @@ export const stockPatchResolver = resolve<Stock, HookContext<StockService>>({})
 // Schema for allowed query properties
 export const stockQueryProperties = Type.Pick(stockSchema, [
   '_id',
+  'userId',
+  'dateTime',
   'securityFirm',
   'stockOperationCategory',
   'stockCode'
@@ -79,14 +81,15 @@ export const stockQueryProperties = Type.Pick(stockSchema, [
 export const stockQuerySchema = Type.Intersect(
   [
     querySyntax(stockQueryProperties),
-    Type.Object(
-      {
-        userId: Type.String(),
-        beginDate: Type.Optional(Type.String({ format: 'date-time' })),
-        endDate: Type.Optional(Type.String({ format: 'date-time' })),
-      },
-      { additionalProperties: false }
-    )
+    // Type.Object(
+    //   {
+    //     userId: Type.String(),
+    //     dateTime: Type.Optional(Type.String({ format: 'date-time' })),
+    //     // beginDate: Type.Optional(Type.String({ format: 'date-time' })),
+    //     // endDate: Type.Optional(Type.String({ format: 'date-time' })),
+    //   },
+    //   { additionalProperties: false }
+    // )
   ],
   { additionalProperties: false }
 )
