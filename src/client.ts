@@ -4,11 +4,11 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { stocksClient } from './services/stocks/stocks.shared'
+export type { Stocks, StocksData, StocksQuery, StocksPatch } from './services/stocks/stocks.shared'
+
 import { userClient } from './services/users/users.shared'
 export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared'
-
-import { stockClient } from './services/stock/stock.shared'
-export type { Stock, StockData, StockQuery, StockPatch } from './services/stock/stock.shared'
 
 export interface Configuration {
   connection: TransportConnection<ServiceTypes>
@@ -36,7 +36,7 @@ export const createClient = <Configuration = any,>(
   client.configure(authenticationClient(authenticationOptions))
   client.set('connection', connection)
 
-  client.configure(stockClient)
   client.configure(userClient)
+  client.configure(stocksClient)
   return client
 }
